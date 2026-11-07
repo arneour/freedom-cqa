@@ -1,0 +1,68 @@
+{
+  "conversation_id": "p1-en-012",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+    {
+      "timestamp": "00:00",
+      "speaker": "client",
+      "text": "Where do I find the company's financial statements? I keep getting sent to my account reports."
+    },
+    {
+      "timestamp": "00:01",
+      "speaker": "bot",
+      "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+    },
+    {
+      "timestamp": "00:01",
+      "speaker": "bot",
+      "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+    },
+    {
+      "timestamp": "00:08",
+      "speaker": "bot",
+      "text": "Freedom Holding Corp. publishes its financial statements on its official site."
+    },
+    {
+      "timestamp": "00:33",
+      "speaker": "client",
+      "text": "Can you connect me with a person to point me to the right menu?"
+    },
+    {
+      "timestamp": "00:36",
+      "speaker": "bot",
+      "text": "Would you like me to connect you with an agent?"
+    },
+    {
+      "timestamp": "00:54",
+      "speaker": "client",
+      "text": "Yes"
+    },
+    {
+      "timestamp": "00:55",
+      "speaker": "bot",
+      "text": "Please wait. An agent will join the chat shortly."
+    },
+    {
+      "timestamp": "00:56",
+      "speaker": "system",
+      "text": "Chat transferred to an agent."
+    },
+    {
+      "timestamp": "02:50",
+      "speaker": "operator",
+      "text": "Hello, I'm Daniel. On the Freedom Holding Corp. website, go to Investors, then Financial Information."
+    },
+    {
+      "timestamp": "03:08",
+      "speaker": "client",
+      "text": "That's the page I was after. Thanks."
+    },
+    {
+      "timestamp": "03:27",
+      "speaker": "operator",
+      "text": "You're welcome. Have a good day!"
+    }
+  ],
+  "audio_url": null
+}

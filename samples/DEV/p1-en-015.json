@@ -1,0 +1,78 @@
+{
+  "conversation_id": "p1-en-015",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+    {
+      "timestamp": "00:00",
+      "speaker": "client",
+      "text": "Can't get into the account."
+    },
+    {
+      "timestamp": "00:04",
+      "speaker": "bot",
+      "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+    },
+    {
+      "timestamp": "00:04",
+      "speaker": "bot",
+      "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+    },
+    {
+      "timestamp": "00:14",
+      "speaker": "bot",
+      "text": "Are you using the mobile app or the website?"
+    },
+    {
+      "timestamp": "00:32",
+      "speaker": "client",
+      "text": "I'd rather speak with someone. Please connect me."
+    },
+    {
+      "timestamp": "00:33",
+      "speaker": "bot",
+      "text": "Would you like me to connect you with an agent?"
+    },
+    {
+      "timestamp": "00:40",
+      "speaker": "client",
+      "text": "Yes"
+    },
+    {
+      "timestamp": "00:41",
+      "speaker": "bot",
+      "text": "Please wait. An agent will join the chat shortly."
+    },
+    {
+      "timestamp": "00:42",
+      "speaker": "system",
+      "text": "Chat transferred to an agent."
+    },
+    {
+      "timestamp": "01:21",
+      "speaker": "operator",
+      "text": "Open settings then go back and log in again."
+    },
+    {
+      "timestamp": "02:00",
+      "speaker": "client",
+      "text": "Settings where? I'm on the company website and there's no login."
+    },
+    {
+      "timestamp": "02:48",
+      "speaker": "operator",
+      "text": "Oh, that site is just for information. Go to tradernet.global and sign in there."
+    },
+    {
+      "timestamp": "03:21",
+      "speaker": "client",
+      "text": "That worked."
+    },
+    {
+      "timestamp": "04:06",
+      "speaker": "operator",
+      "text": "Bye."
+    }
+  ],
+  "audio_url": null
+}

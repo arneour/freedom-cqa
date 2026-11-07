@@ -1,0 +1,78 @@
+{
+  "conversation_id": "p1-en-005",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+    {
+      "timestamp": "00:00",
+      "speaker": "client",
+      "text": "I'm going to a bank branch to fund the brokerage account. Where do I get the transfer details?"
+    },
+    {
+      "timestamp": "00:02",
+      "speaker": "bot",
+      "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+    },
+    {
+      "timestamp": "00:02",
+      "speaker": "bot",
+      "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+    },
+    {
+      "timestamp": "00:11",
+      "speaker": "bot",
+      "text": "You can download the bank transfer details in the app."
+    },
+    {
+      "timestamp": "00:37",
+      "speaker": "client",
+      "text": "Connect me with someone, please. I don't want to take the wrong details to the branch."
+    },
+    {
+      "timestamp": "00:38",
+      "speaker": "bot",
+      "text": "Would you like me to connect you with an agent?"
+    },
+    {
+      "timestamp": "00:55",
+      "speaker": "client",
+      "text": "Yes, please"
+    },
+    {
+      "timestamp": "00:56",
+      "speaker": "bot",
+      "text": "Please wait. An agent will join the chat shortly."
+    },
+    {
+      "timestamp": "00:59",
+      "speaker": "system",
+      "text": "Chat transferred to an agent."
+    },
+    {
+      "timestamp": "02:52",
+      "speaker": "operator",
+      "text": "Hi, I'm Lina. In the app, open Menu, then Add Funds, then the bank transfer details option."
+    },
+    {
+      "timestamp": "03:33",
+      "speaker": "client",
+      "text": "I'm sending euros. Is it the same page?"
+    },
+    {
+      "timestamp": "04:23",
+      "speaker": "operator",
+      "text": "Yes. Select the currency you need before downloading the details. Take those details to the branch."
+    },
+    {
+      "timestamp": "05:02",
+      "speaker": "client",
+      "text": "Got them, thanks."
+    },
+    {
+      "timestamp": "05:51",
+      "speaker": "operator",
+      "text": "You're welcome. Goodbye!"
+    }
+  ],
+  "audio_url": null
+}
