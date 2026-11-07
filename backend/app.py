@@ -23,6 +23,7 @@ from pydantic import BaseModel, Field  # noqa: E402
 
 import datasource  # noqa: E402
 import evaluator  # noqa: E402
+import rules  # noqa: E402
 from db import dumps, now, row, tx  # noqa: E402
 from scoring import compute, normalize_item  # noqa: E402
 
@@ -38,10 +39,25 @@ AP_JSON = ("new_item",)
 # ---------------- Чек-листы ----------------
 
 def ensure_default_checklist():
+    data = json.loads((Path(__file__).parent / "default_checklist.json").read_text(encoding="utf-8"))
     with tx() as con:
-        if con.execute("SELECT 1 FROM checklists LIMIT 1").fetchone():
+        rows = con.execute("SELECT id, data FROM checklists ORDER BY id").fetchall()
+        if rows:
+            # Миграция: самая первая (засеянная) версия исходного чек-листа получает актуальные правила auto
+            # из default_checklist.json. Версии, сохранённые пользователем, не трогаем.
+            auto = {c["id"]: c.get("auto", "") for c in data["criteria"]}
+            for r in rows:
+                d = json.loads(r["data"])
+                if d.get("name") == data["name"]:
+                    changed = False
+                    for c in d["criteria"]:
+                        if c["id"] in auto and c.get("auto") != auto[c["id"]]:
+                            c["auto"] = auto[c["id"]]
+                            changed = True
+                    if changed:
+                        con.execute("UPDATE checklists SET data=? WHERE id=?", (dumps(d), r["id"]))
+                    break  # только первая по id
             return
-        data = json.loads((Path(__file__).parent / "default_checklist.json").read_text(encoding="utf-8"))
         con.execute("INSERT INTO checklists(name,data,created_at,is_active) VALUES(?,?,?,1)",
                     (data["name"], dumps(data), now()))
 
@@ -76,6 +92,7 @@ class Criterion(BaseModel):
     description: str = ""
     na_condition: str = ""
     scale: list[ScaleStep] = Field(default_factory=list)
+    auto: str = ""  # имя правила из rules.py (используется в режиме локальной модели); пусто — оценивает модель
 
 
 class Section(BaseModel):
@@ -109,6 +126,8 @@ def validate_checklist(cl: ChecklistIn) -> list[str]:
                 errs.append(f"{c.title}: у шкалы должно быть минимум 2 ступени")
             elif max(s.value for s in c.scale) <= 0:
                 errs.append(f"{c.title}: верхняя ступень шкалы должна быть больше 0")
+        if c.auto and c.auto not in rules.RULES:
+            errs.append(f"{c.title}: неизвестное правило «{c.auto}»")
         if c.na_allowed and not c.na_condition.strip():
             errs.append(f"{c.title}: укажите условие N/A")
         if c.section and c.section not in sec_ids:
@@ -490,7 +509,9 @@ def status():
     return {"evaluator": evaluator.model_name() if evaluator.llm_available() else "heuristic",
             "llm": evaluator.llm_available(),
             "active_checklist": {"id": cl["id"], "name": cl["name"]} if cl else None,
-            "data_api_configured": bool(os.environ.get("DATA_API_URL"))}
+            "data_api_configured": bool(os.environ.get("DATA_API_URL")),
+            "hybrid_rules": evaluator.mode() == "ollama",
+            "rules": {k: v[0] for k, v in rules.RULES.items()}}
 
 
 ensure_default_checklist()

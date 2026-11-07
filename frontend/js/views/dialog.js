@@ -187,7 +187,7 @@ function critCard(c, ev, fin) {
       <span class="title">${esc(c.title)}</span>
       <span class="ans ${answerClass(item, c)}">${answerLabel(item, c)}</span>
     </div>
-    <div class="crit-meta small">Вес ${fmt(c.weight)} · ${points}</div>
+    <div class="crit-meta small">Вес ${fmt(c.weight)} · ${points}${orig.source === "rule" ? ` · <span class="pill">проверено правилом</span>` : orig.source === "model" ? ` · <span class="pill">оценка модели</span>` : ""}</div>
     <p class="expl">${esc(item.explanation)}</p>
     ${item.answer === "na" && item.na_reason ? `<p class="na-reason small"><b>Причина N/A:</b> ${esc(item.na_reason)}</p>` : ""}
     <div class="refs small">

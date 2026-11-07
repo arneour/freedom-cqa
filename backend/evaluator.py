@@ -187,6 +187,11 @@ def evaluate_ollama(dialog: dict, checklist: dict) -> tuple[dict, dict]:
     import urllib.request
 
     model = model_name()
+    # По умолчанию — по одному критерию за запрос (надёжнее для маленьких моделей), см. ollama_eval.py.
+    # OLLAMA_PER_CRITERION=0 — старый режим: все критерии одним запросом.
+    if os.environ.get("OLLAMA_PER_CRITERION", "1") == "1":
+        from ollama_eval import evaluate_per_criterion
+        return evaluate_per_criterion(dialog, checklist, model)
     url = os.environ.get("OLLAMA_URL", "http://localhost:11434").rstrip("/") + "/api/chat"
     system = ("Ты — эксперт по контролю качества клиентской поддержки брокерской компании Freedom Broker. "
               "Оцени работу оператора по чек-листу строго по его правилам.\n\n" + GUIDE

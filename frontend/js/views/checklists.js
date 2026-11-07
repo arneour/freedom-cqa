@@ -4,7 +4,8 @@ import { esc, toast } from "../ui.js";
 const TYPES = { binary: "Да / Нет", scale: "Шкала", flag: "Флаг грубой ошибки (без баллов)" };
 
 export async function renderChecklists(root, id) {
-  const list = await api.checklists();
+  const [list, status] = await Promise.all([api.checklists(), api.status()]);
+  const ruleNames = status.rules || {};
   const curId = id || (list.find((c) => c.is_active) || list[0]).id;
   const cl = await api.checklist(curId);
   const draft = { name: cl.name, sections: structuredClone(cl.data.sections || []), criteria: structuredClone(cl.data.criteria) };
@@ -34,7 +35,8 @@ export async function renderChecklists(root, id) {
       <div class="sections-ed">${draft.sections.map((s, i) => `<span class="sec-ed"><input data-sec="${i}" value="${esc(s.title)}"><button class="link" data-delsec="${i}" title="Удалить">✕</button></span>`).join("")}
         <button class="link" id="addsec">+ секция</button></div>
       <h4>Критерии</h4>
-      <div id="crits">${draft.criteria.map((c, i) => critEditor(c, i, draft.sections)).join("")}</div>
+      <div id="crits">${draft.criteria.map((c, i) => critEditor(c, i, draft.sections, ruleNames)).join("")}</div>
+      <p class="small muted">«Проверка правилом» — формальный критерий проверяется кодом по однозначным признакам в транскрипте (режим локальной модели). Без правила критерий оценивает модель.</p>
       <button id="add">+ Добавить критерий</button>
       <div class="row save-bar">
         <label class="chk"><input type="checkbox" id="activate" checked> сделать активным</label>
@@ -77,7 +79,7 @@ export async function renderChecklists(root, id) {
       const n = draft.criteria.length + 1;
       let nid = `c${String(n).padStart(2, "0")}`;
       while (draft.criteria.some((c) => c.id === nid)) nid += "x";
-      draft.criteria.push({ id: nid, code: String(n).padStart(2, "0"), section: draft.sections[0]?.id || "", title: "Новый критерий", type: "binary", weight: 10, na_allowed: false, description: "Да — …", na_condition: "", scale: [] });
+      draft.criteria.push({ id: nid, code: String(n).padStart(2, "0"), section: draft.sections[0]?.id || "", title: "Новый критерий", type: "binary", weight: 10, na_allowed: false, description: "Да — …", na_condition: "", scale: [], auto: "" });
       draw();
       ed.querySelector(`[data-i="${draft.criteria.length - 1}"] input`).focus();
     } else if (t.dataset.del !== undefined) {
@@ -117,7 +119,7 @@ export async function renderChecklists(root, id) {
   });
 }
 
-function critEditor(c, i, sections) {
+function critEditor(c, i, sections, ruleNames) {
   return `
   <div class="crit-ed" data-i="${i}">
     <div class="row">
@@ -126,6 +128,10 @@ function critEditor(c, i, sections) {
       <select data-f="type">${Object.entries(TYPES).map(([k, v]) => `<option value="${k}" ${c.type === k ? "selected" : ""}>${v}</option>`).join("")}</select>
       ${c.type === "flag" ? "" : `<label>Вес <input type="number" min="0" step="1" data-f="weight" value="${c.weight}" style="width:5em"></label>`}
       <select data-f="section">${sections.map((s) => `<option value="${s.id}" ${c.section === s.id ? "selected" : ""}>${esc(s.title)}</option>`).join("")}<option value="" ${c.section ? "" : "selected"}>без секции</option></select>
+      <select data-f="auto" title="Проверка правилом">
+        <option value="" ${c.auto ? "" : "selected"}>оценивает модель</option>
+        ${Object.entries(ruleNames).map(([k, v]) => `<option value="${k}" ${c.auto === k ? "selected" : ""}>правило: ${esc(v)}</option>`).join("")}
+      </select>
       <button class="link" data-up="${i}" title="Выше">↑</button>
       <button class="link danger" data-del="${i}" title="Удалить">✕</button>
     </div>
