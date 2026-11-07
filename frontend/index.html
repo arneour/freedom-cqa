@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CQA — оценка качества диалогов</title>
+  <link rel="stylesheet" href="static/css/app.css">
+</head>
+<body>
+  <!-- Корневой элемент приложения. Для Dynamics 365 этот блок + css/js публикуются как веб-ресурсы. -->
+  <div id="cqa-root" class="cqa">
+    <header class="cqa-header">
+      <div class="brand">CQA <span>Conversation Quality Analytics</span></div>
+      <nav>
+        <a href="#/dialogs" data-nav="dialogs">Диалоги</a>
+        <a href="#/appeals" data-nav="appeals">Апелляции <b id="appeals-badge" class="badge hidden"></b></a>
+        <a href="#/checklists" data-nav="checklists">Чек-листы</a>
+      </nav>
+      <div id="status" class="status"></div>
+    </header>
+    <main id="view"></main>
+    <div id="toast" class="toast hidden"></div>
+  </div>
+  <script src="static/js/config.js"></script>
+  <script type="module" src="static/js/app.js"></script>
+</body>
+</html>
