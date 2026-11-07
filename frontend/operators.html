@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CQA — операторы (демо)</title>
+  <link rel="stylesheet" href="static/css/app.css">
+  <link rel="stylesheet" href="static/css/operators.css">
+</head>
+<body>
+  <!-- Отдельная демо-страница: профили операторов и лидерборд. Основной интерфейс — index.html. -->
+  <div id="cqa-root" class="cqa">
+    <header class="cqa-header">
+      <div class="brand">CQA <span>Conversation Quality Analytics</span></div>
+      <nav>
+        <a href="/#/dialogs">Диалоги</a>
+        <a href="/#/appeals">Апелляции</a>
+        <a href="/#/checklists">Чек-листы</a>
+        <a href="#/" class="active">Операторы <small class="demo-tag">демо</small></a>
+      </nav>
+    </header>
+    <main id="view"></main>
+    <div id="toast" class="toast hidden"></div>
+  </div>
+  <script src="static/js/config.js"></script>
+  <script type="module" src="static/js/operators.js"></script>
+</body>
+</html>

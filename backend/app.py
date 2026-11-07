@@ -523,3 +523,17 @@ app.mount("/static", StaticFiles(directory=FRONT), name="static")
 @app.get("/")
 def index():
     return FileResponse(FRONT / "index.html")
+
+
+# ---------------- ДЕМО: профили операторов (отдельная страница, только чтение) ----------------
+# Подключается изолированно: ошибка в демо-модуле не мешает основному приложению.
+try:
+    import demo_operators
+
+    app.include_router(demo_operators.make_router(final_for, appeals_for, get_checklist, active_checklist))
+
+    @app.get("/operators")
+    def operators_page():
+        return FileResponse(FRONT / "operators.html")
+except Exception as _demo_err:  # noqa: BLE001
+    print("Демо-страница операторов отключена:", _demo_err)

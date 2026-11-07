@@ -28,6 +28,7 @@ body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 -ap
 .cqa-header nav a { padding: 6px 12px; border-radius: 6px; color: var(--text); }
 .cqa-header nav a.active { background: var(--accent-2); color: var(--accent); font-weight: 600; }
 .status { margin-left: auto; }
+.demo-tag { background: var(--mid-bg); color: var(--mid); border-radius: 8px; padding: 0 6px; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
 .badge { background: var(--bad); color: #fff; border-radius: 10px; padding: 0 6px; font-size: 11px; margin-left: 4px; }
 
 main { padding: 16px 20px; max-width: 1500px; margin: 0 auto; }

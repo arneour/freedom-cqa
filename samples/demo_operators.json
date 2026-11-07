@@ -1,0 +1,559 @@
+{
+  "_note": "ДЕМО-данные: операторы, назначение диалогов и даты сгенерированы для показа профилей. В исходном наборе DEV этих полей нет.",
+  "generated_by": "backend/tools/gen_demo_operators.py",
+  "seed": 20261107,
+  "period": {
+    "from": "2026-10-10",
+    "to": "2026-11-06",
+    "timezone": "Asia/Almaty (+05:00)"
+  },
+  "operators": [
+    {
+      "id": "op-1",
+      "name": "Алия Сарсенова",
+      "team": "Поддержка брокера"
+    },
+    {
+      "id": "op-2",
+      "name": "Ерлан Жумабаев",
+      "team": "Поддержка брокера"
+    },
+    {
+      "id": "op-3",
+      "name": "Камила Нурланова",
+      "team": "Поддержка брокера"
+    },
+    {
+      "id": "op-4",
+      "name": "Данияр Оспанов",
+      "team": "Поддержка брокера"
+    },
+    {
+      "id": "op-5",
+      "name": "Мария Ковалёва",
+      "team": "Поддержка брокера"
+    }
+  ],
+  "dialogs": [
+    {
+      "conversation_id": "p1-en-001",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-17T10:48:00+05:00",
+      "ended_at": "2026-10-17T10:50:04+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-002",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-10-18T14:57:20+05:00",
+      "ended_at": "2026-10-18T14:59:54+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-003",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-11-01T15:08:45+05:00",
+      "ended_at": "2026-11-01T15:12:24+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-004",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-10-28T16:57:59+05:00",
+      "ended_at": "2026-10-28T17:02:20+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-005",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-11-01T09:23:18+05:00",
+      "ended_at": "2026-11-01T09:29:09+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-006",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-21T13:51:00+05:00",
+      "ended_at": "2026-10-21T14:02:29+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-007",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-10-10T13:14:12+05:00",
+      "ended_at": "2026-10-10T13:16:27+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-008",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-11-01T12:56:41+05:00",
+      "ended_at": "2026-11-01T13:02:54+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-009",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-10-15T16:43:51+05:00",
+      "ended_at": "2026-10-15T16:46:33+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-010",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-10-23T11:12:54+05:00",
+      "ended_at": "2026-10-23T11:16:49+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-011",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-10-18T12:53:28+05:00",
+      "ended_at": "2026-10-18T12:56:31+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-012",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-11-03T09:02:06+05:00",
+      "ended_at": "2026-11-03T09:05:33+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-013",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-30T09:09:37+05:00",
+      "ended_at": "2026-10-30T09:15:08+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-014",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-10-19T19:42:21+05:00",
+      "ended_at": "2026-10-19T19:47:03+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-en-015",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-11-05T13:29:51+05:00",
+      "ended_at": "2026-11-05T13:33:57+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-001",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-10-29T10:05:27+05:00",
+      "ended_at": "2026-10-29T10:07:31+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-002",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-10-24T14:57:13+05:00",
+      "ended_at": "2026-10-24T15:00:27+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-003",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-28T19:11:47+05:00",
+      "ended_at": "2026-10-28T19:21:28+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-004",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-10-12T09:08:48+05:00",
+      "ended_at": "2026-10-12T09:13:09+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-005",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-10-16T16:21:36+05:00",
+      "ended_at": "2026-10-16T16:27:27+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-006",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-10-20T18:45:43+05:00",
+      "ended_at": "2026-10-20T18:49:58+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-007",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-10-28T11:01:45+05:00",
+      "ended_at": "2026-10-28T11:04:00+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-008",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-11-02T14:14:33+05:00",
+      "ended_at": "2026-11-02T14:17:35+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-009",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-10-28T09:13:19+05:00",
+      "ended_at": "2026-10-28T09:18:40+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-010",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-20T19:28:39+05:00",
+      "ended_at": "2026-10-20T19:32:34+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-011",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-10-11T16:09:43+05:00",
+      "ended_at": "2026-10-11T16:13:35+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-012",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-25T13:25:48+05:00",
+      "ended_at": "2026-10-25T13:29:45+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-013",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-11-01T19:22:54+05:00",
+      "ended_at": "2026-11-01T19:28:25+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-014",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-10-29T09:48:00+05:00",
+      "ended_at": "2026-10-29T09:50:34+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-kz-015",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-10-27T09:20:12+05:00",
+      "ended_at": "2026-10-27T09:24:18+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-001",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-10-26T11:11:39+05:00",
+      "ended_at": "2026-10-26T11:13:43+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-002",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-11-03T18:11:59+05:00",
+      "ended_at": "2026-11-03T18:17:16+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-003",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-10-13T15:28:59+05:00",
+      "ended_at": "2026-10-13T15:34:06+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-004",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-28T16:38:17+05:00",
+      "ended_at": "2026-10-28T16:42:38+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-005",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-30T14:04:58+05:00",
+      "ended_at": "2026-10-30T14:12:14+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-006",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-10-17T10:04:19+05:00",
+      "ended_at": "2026-10-17T10:10:02+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-007",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-10-23T10:25:41+05:00",
+      "ended_at": "2026-10-23T10:29:22+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-008",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-10-29T15:54:15+05:00",
+      "ended_at": "2026-10-29T15:57:50+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-009",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-27T12:28:09+05:00",
+      "ended_at": "2026-10-27T12:32:44+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-010",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-10-21T19:58:21+05:00",
+      "ended_at": "2026-10-21T20:12:28+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-011",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-10-25T11:42:16+05:00",
+      "ended_at": "2026-10-25T11:45:57+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-012",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-10-26T12:35:20+05:00",
+      "ended_at": "2026-10-26T12:38:46+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-013",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-11-03T09:15:36+05:00",
+      "ended_at": "2026-11-03T09:20:12+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-014",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-11-02T09:23:39+05:00",
+      "ended_at": "2026-11-02T09:27:03+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-015",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-10-31T15:34:10+05:00",
+      "ended_at": "2026-10-31T15:36:58+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-016",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-19T13:08:33+05:00",
+      "ended_at": "2026-10-19T13:12:46+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-017",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-10-23T10:52:26+05:00",
+      "ended_at": "2026-10-23T10:56:50+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-018",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-10-22T15:43:32+05:00",
+      "ended_at": "2026-10-22T15:47:15+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-019",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-10-22T12:44:23+05:00",
+      "ended_at": "2026-10-22T12:49:00+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-020",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-19T13:22:44+05:00",
+      "ended_at": "2026-10-19T13:28:27+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-021",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-10-21T11:52:47+05:00",
+      "ended_at": "2026-10-21T11:54:57+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-022",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-11-06T10:07:46+05:00",
+      "ended_at": "2026-11-06T10:10:46+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-023",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-10-20T15:01:48+05:00",
+      "ended_at": "2026-10-20T15:05:39+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-024",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-10-20T16:18:30+05:00",
+      "ended_at": "2026-10-20T16:22:37+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-025",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-11-02T13:07:06+05:00",
+      "ended_at": "2026-11-02T13:09:41+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-026",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-10-18T11:13:25+05:00",
+      "ended_at": "2026-10-18T11:17:27+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-027",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-10-30T09:34:50+05:00",
+      "ended_at": "2026-10-30T09:41:09+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-028",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-10-30T15:38:02+05:00",
+      "ended_at": "2026-10-30T15:43:53+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-029",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-10-11T14:22:39+05:00",
+      "ended_at": "2026-10-11T14:26:05+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p1-ru-030",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-10-19T09:10:11+05:00",
+      "ended_at": "2026-10-19T09:14:29+05:00",
+      "date_source": "generated"
+    },
+    {
+      "conversation_id": "p4-ru-001",
+      "group_id": "DEV",
+      "operator_id": "op-3",
+      "started_at": "2026-11-03T18:10:00+05:00",
+      "ended_at": "2026-11-03T18:15:20+05:00",
+      "date_source": "transcript"
+    },
+    {
+      "conversation_id": "p4-ru-002",
+      "group_id": "DEV",
+      "operator_id": "op-5",
+      "started_at": "2026-11-03T18:49:20+05:00",
+      "ended_at": "2026-11-03T19:00:09+05:00",
+      "date_source": "transcript"
+    },
+    {
+      "conversation_id": "p4-ru-003",
+      "group_id": "DEV",
+      "operator_id": "op-1",
+      "started_at": "2026-11-03T20:49:13+05:00",
+      "ended_at": "2026-11-03T20:55:52+05:00",
+      "date_source": "transcript"
+    },
+    {
+      "conversation_id": "p4-ru-004",
+      "group_id": "DEV",
+      "operator_id": "op-2",
+      "started_at": "2026-11-03T17:48:51+05:00",
+      "ended_at": "2026-11-03T17:56:07+05:00",
+      "date_source": "transcript"
+    },
+    {
+      "conversation_id": "p4-ru-005",
+      "group_id": "DEV",
+      "operator_id": "op-4",
+      "started_at": "2026-11-03T20:28:08+05:00",
+      "ended_at": "2026-11-03T20:34:00+05:00",
+      "date_source": "transcript"
+    }
+  ]
+}
