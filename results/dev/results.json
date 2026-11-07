@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "team_name": "freedom-cqa",
+  "team_name": "all mute",
   "model": {
     "mode": "local",
     "name": "qwen2.5:3b + rule engine (rules.py)"
