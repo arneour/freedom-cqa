@@ -189,6 +189,39 @@ def rule_gross(dialog: dict, crit: dict) -> Optional[dict]:
                       + (f" (проверены реплики оператора #{rng[0]}–#{rng[1]})." if rng else "."), (), rng)
 
 
+GENERIC_HELP = (r"чем (могу|можем) (вам )?помочь|с чем помочь|какой у вас вопрос|"
+                r"how (can|may) I help|what can I do for you|"
+                r"қалай көмектесе аламын|сізге қандай көмек")
+
+
+def rule_need(dialog: dict, crit: dict) -> Optional[dict]:
+    """Выявление потребности: однозначные случаи — правилом, вопрос «хватало ли данных» — модели."""
+    tr = dialog["transcript"]
+    ops = _ops(dialog)
+    if not ops:
+        return None
+    first_i, first = ops[0]
+    client_before = [m for m in tr[:first_i - 1] if m.get("speaker") == "client" and len((m.get("text") or "").split()) >= 3]
+    if re.search(GENERIC_HELP, first, I) and client_before:
+        return _res("no", f"Клиент уже описал запрос, но оператор в #{first_i} задал шаблонный вопрос, не учтя известные детали.",
+                    [first_i], (1, first_i))
+    questions = [q for q in re.split(r"(?<=[.!?])\s+", first) if q.strip().endswith("?") and not re.search(GENERIC_HELP, q, I)]
+    if questions:
+        return _res("yes", f"Оператор уточнил недостающее до ответа: «{questions[0].strip()}» (#{first_i}).", [first_i])
+    return None
+
+
+def rule_consultation(dialog: dict, crit: dict) -> Optional[dict]:
+    """N/A консультации — только если клиент так и не сформулировал запрос.
+    Если запрос есть, вердикт не выносится, но модели запрещается N/A (ограничение no_na)."""
+    req = next((i for i, m in enumerate(dialog["transcript"], start=1)
+                if m.get("speaker") == "client" and len((m.get("text") or "").split()) >= 3), None)
+    if req is None and crit.get("na_allowed"):
+        return _res("na", "Клиент не сформулировал запрос до окончания чата.",
+                    na_reason=crit.get("na_condition") or "Запрос не сформулирован.")
+    return {"constraint": "no_na", "request_at": req}
+
+
 def rule_empathy(dialog: dict, crit: dict) -> Optional[dict]:
     """Оскорбление клиента однозначно означает «Нет»; остальное решает модель."""
     hit = next((i for i, t in _ops(dialog) if re.search(INSULT, t, I)), None)
@@ -203,7 +236,14 @@ RULES: dict[str, tuple[str, Callable[[dict, dict], Optional[dict]]]] = {
     "identification": ("Идентификация по системным событиям", rule_identification),
     "gross": ("Грубые ошибки по шаблонам", rule_gross),
     "empathy": ("Эмпатия: оскорбление = «Нет», иначе модель", rule_empathy),
+    "consultation": ("Консультация: N/A только без запроса клиента, иначе модель", rule_consultation),
+    "need": ("Потребность: уточняющий вопрос = «Да», шаблонный вопрос = «Нет», иначе модель", rule_need),
 }
+
+
+def is_verdict(r: Optional[dict]) -> bool:
+    """Правило может вернуть готовый вердикт или только ограничение для модели ({"constraint": ...})."""
+    return r is not None and "constraint" not in r
 
 
 def apply_rule(dialog: dict, crit: dict) -> Optional[dict]:
@@ -211,7 +251,7 @@ def apply_rule(dialog: dict, crit: dict) -> Optional[dict]:
     if not name or name not in RULES:
         return None
     r = RULES[name][1](dialog, crit)
-    if r is not None:
+    if is_verdict(r):
         r["criterion_id"] = crit["id"]
         r["source"] = "rule"
     return r

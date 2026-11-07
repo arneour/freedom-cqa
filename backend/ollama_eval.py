@@ -16,7 +16,7 @@ import os
 import urllib.request
 
 from evaluator import SPEAKER, render_transcript
-from rules import apply_rule
+from rules import apply_rule, is_verdict
 
 SYSTEM = (
     "Ты проверяешь качество работы ОПЕРАТОРА (живого сотрудника) в диалоге поддержки брокера Freedom Broker. "
@@ -47,17 +47,25 @@ def _facts(dialog: dict) -> str:
     return "\n".join(lines)
 
 
-def _criterion_prompt(c: dict) -> str:
+def _criterion_prompt(c: dict, no_na: bool = False) -> str:
+    na_ok = c.get("na_allowed") and not no_na
     out = [f"КРИТЕРИЙ {c.get('code', '')} «{c['title']}»", f"Правило: {c.get('description', '')}"]
     if c["type"] == "scale":
         out.append("Выбери одну ступень шкалы (поле score):")
         out += [f"  {s['value']} — {s['label']}" for s in c["scale"]]
-        out.append('Поле answer = "score".' + (' Или answer = "na", если выполнено условие N/A.' if c.get("na_allowed") else ""))
+        out.append("Выбери ступень, описание которой точнее всего подходит. Если конкретных проблем нет — ставь верхнюю "
+                   "ступень. Ниже верхней — только при конкретной проблеме, назови её и номер реплики.")
+        out.append('Поле answer = "score".' + (' Или answer = "na", если выполнено условие N/A.' if na_ok else ""))
     elif c["type"] == "flag":
         out.append('answer = "yes", если нарушение ЕСТЬ; "no", если нарушения нет. Поле score = 0.')
     else:
-        out.append('answer = "yes" или "no"' + (' или "na"' if c.get("na_allowed") else "") + ". Поле score = 0.")
-    if c.get("na_allowed") and c.get("na_condition"):
+        out.append('answer = "yes" или "no"' + (' или "na"' if na_ok else "") + ". Поле score = 0.")
+        if na_ok:
+            out.append("Если действие в этом диалоге не требовалось — это N/A, а не «Нет». "
+                       "«Нет» — только если действие было нужно, но оператор его не сделал.")
+    if no_na:
+        out.append("Клиент сформулировал запрос — N/A здесь недопустим.")
+    if na_ok and c.get("na_condition"):
         out.append(f"Условие N/A: {c['na_condition']}")
         out.append("Сначала реши na_condition_met: true, если это условие выполнено (тогда answer = \"na\"), иначе false.")
     if c["type"] == "flag":
@@ -68,12 +76,13 @@ def _criterion_prompt(c: dict) -> str:
     return "\n".join(out)
 
 
-def _schema(c: dict) -> dict:
+def _schema(c: dict, no_na: bool = False) -> dict:
+    na_ok = c.get("na_allowed") and not no_na
     if c["type"] == "scale":
-        answers = ["score"] + (["na"] if c.get("na_allowed") else [])
+        answers = ["score"] + (["na"] if na_ok else [])
         scores = sorted({s["value"] for s in c["scale"]})
     else:
-        answers = ["yes", "no"] + (["na"] if c.get("na_allowed") and c["type"] != "flag" else [])
+        answers = ["yes", "no"] + (["na"] if na_ok and c["type"] != "flag" else [])
         scores = [0]
     props: dict = {"explanation": {"type": "string", "maxLength": 300}}
     if c["type"] == "flag":
@@ -151,17 +160,18 @@ def evaluate_per_criterion(dialog: dict, checklist: dict, model: str) -> tuple[d
     ruled = {c["id"]: apply_rule(dialog, c) for c in checklist["criteria"]}
     labels = {"yes": "Да", "no": "Нет", "na": "N/A"}
     rule_facts = [f"- {c.get('code', '')} {c['title']}: {labels.get(r['answer'], r['answer'])}. {r['explanation']}"
-                  for c in checklist["criteria"] if (r := ruled[c["id"]])]
+                  for c in checklist["criteria"] if is_verdict(r := ruled[c["id"]])]
     head = ("ТРАНСКРИПТ:\n" + render_transcript(dialog) + "\n\n" + _facts(dialog) + "\n"
             + ("Уже проверено правилами:\n" + "\n".join(rule_facts) + "\n" if rule_facts else "") + "\n")
-    results, tin, tout = [r for r in ruled.values() if r], 0, 0
+    results, tin, tout = [r for r in ruled.values() if is_verdict(r)], 0, 0
     calls = 0
     for c in checklist["criteria"]:
-        if ruled[c["id"]] is not None:
+        if is_verdict(ruled[c["id"]]):
             continue
+        no_na = (ruled[c["id"]] or {}).get("constraint") == "no_na"
         calls += 1
-        messages = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": head + _criterion_prompt(c)}]
-        resp = _chat(model, messages, _schema(c))
+        messages = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": head + _criterion_prompt(c, no_na)}]
+        resp = _chat(model, messages, _schema(c, no_na))
         tin += resp.get("prompt_eval_count", 0) or 0
         tout += resp.get("eval_count", 0) or 0
         try:

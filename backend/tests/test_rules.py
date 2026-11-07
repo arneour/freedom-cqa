@@ -130,3 +130,18 @@ def test_empathy_insult_is_no_else_model():
     crit = {"id": "c05", "auto": "empathy", "type": "binary"}
     assert apply_rule(dlg(("operator", "Вы вообще читать умеете?")), crit)["answer"] == "no"
     assert apply_rule(dlg(("operator", "Понимаю ваше беспокойство.")), crit) is None
+
+
+def test_consultation_constraint_and_na():
+    crit = {"id": "c04", "auto": "consultation", "type": "scale", "na_allowed": True, "na_condition": "x"}
+    r = apply_rule(dlg(("client", "Где посмотреть мой тариф?"), ("operator", "В кабинете.")), crit)
+    assert r == {"constraint": "no_na", "request_at": 1}
+    assert apply_rule(dlg(("client", "Да"), ("operator", "Здравствуйте")), crit)["answer"] == "na"
+
+
+def test_need_rule():
+    crit = {"id": "c02", "auto": "need", "type": "binary", "na_allowed": True}
+    assert apply_rule(dlg(("client", "Приказы отклоняются, где причина?"), ("operator", "Здравствуйте, я Олег. Какая бумага?")), crit)["answer"] == "yes"
+    r = apply_rule(dlg(("client", "Где скачать реквизиты пополнения?"), ("operator", "Добрый день, я Виктор. Чем могу помочь?")), crit)
+    assert r["answer"] == "no"
+    assert apply_rule(dlg(("client", "Где тариф?"), ("operator", "Откройте кабинет.")), crit) is None
