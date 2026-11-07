@@ -486,6 +486,26 @@ def resolve_appeal(aid: int, body: ResolveIn):
     return read_evaluation(a["evaluation_id"])
 
 
+# ---------------- Выгрузка для сдачи (формат JSON 1.0) ----------------
+
+@app.get("/api/export/{group_id}")
+def export_results_api(group_id: str, source: Literal["original", "final"] = "original", team: str = ""):
+    """results.json для сдачи + результат проверки формата. Только чтение."""
+    import export_results as ex
+
+    team_name = team.strip() or os.environ.get("CQA_TEAM_NAME", "").strip()
+    if not team_name:
+        raise HTTPException(422, "Укажите название команды (CQA_TEAM_NAME в .env или параметр team)")
+    with tx() as con:
+        ids = [r["conversation_id"] for r in con.execute(
+            "SELECT conversation_id FROM dialogs WHERE group_id=? ORDER BY rowid", (group_id,))]
+    if not ids:
+        raise HTTPException(404, f"В базе нет диалогов набора {group_id}")
+    doc = ex.build_results(group_id, team_name=team_name, source=source, final_for=final_for,
+                           appeals_for=appeals_for, get_checklist=get_checklist)
+    return {"doc": doc, "errors": ex.validate(doc, expected_ids=ids), "warnings": ex.warnings(doc)}
+
+
 # ---------------- Аудио ----------------
 
 @app.get("/api/audio/{group_id}/{conversation_id}")

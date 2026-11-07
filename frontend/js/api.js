@@ -36,5 +36,6 @@ export const api = {
   checklist: (id) => req("GET", `/api/checklists/${id}`),
   saveChecklist: (body) => req("POST", "/api/checklists", body),
   activate: (id) => req("POST", `/api/checklists/${id}/activate`),
+  exportResults: (g, team) => req("GET", `/api/export/${encodeURIComponent(g)}` + (team ? `?team=${encodeURIComponent(team)}` : "")),
   audio: (g, id) => req("GET", `/api/audio/${encodeURIComponent(g)}/${encodeURIComponent(id)}`),
 };

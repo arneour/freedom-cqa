@@ -29,6 +29,7 @@ export async function renderDialogs(root) {
         </label>
         <button id="batch" class="primary" ${state.group ? "" : "disabled"}>Оценить набор</button>
         <label class="chk"><input type="checkbox" id="onlyMissing" checked> только неоценённые</label>
+        <button id="export" ${state.group ? "" : "disabled"} title="Файл для сдачи: формат JSON 1.0 из приложения к гайду">Выгрузить results.json</button>
       </div>
       <div id="job" class="job hidden"></div>
     </section>
@@ -120,6 +121,31 @@ export async function renderDialogs(root) {
       if (!job.total) return toast("Все диалоги уже оценены этим чек-листом");
       pollJob(job.id, root, load);
     } catch (e) { toast(e.message, "error"); }
+  };
+
+  $("#export").onclick = async () => {
+    const run = async (team) => {
+      const r = await api.exportResults(state.group, team);
+      const blob = new Blob([JSON.stringify(r.doc, null, 2) + "\n"], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "results.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+      const ok = r.doc.results.filter((x) => x.status === "ok").length;
+      if (r.errors.length) toast(`Файл выгружен, но есть ошибки формата:\n${r.errors.slice(0, 5).join("\n")}`, "error");
+      else toast(`results.json: ${r.doc.results.length} записей (ok ${ok}, error ${r.doc.results.length - ok}), проверка формата пройдена` +
+        (r.warnings.length ? `\nПредупреждений: ${r.warnings.length}` : ""));
+    };
+    try {
+      await run(localStorage.getItem("cqa.team") || "");
+    } catch (e) {
+      if (!/название команды/i.test(e.message)) return toast(e.message, "error");
+      const team = prompt("Название команды для results.json:");
+      if (!team) return;
+      try { localStorage.setItem("cqa.team", team); } catch { /* без сохранения */ }
+      try { await run(team); } catch (e2) { toast(e2.message, "error"); }
+    }
   };
 
   if (state.job) pollJob(state.job, root, load);
