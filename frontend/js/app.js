@@ -11,13 +11,18 @@ async function route() {
   const hash = location.hash.replace(/^#/, "").split("?")[0] || "/dialogs";
   const parts = hash.split("/").filter(Boolean).map(decodeURIComponent);
   document.querySelectorAll("[data-nav]").forEach((a) => a.classList.toggle("active", a.dataset.nav === parts[0] || (parts[0] === "dialog" && a.dataset.nav === "dialogs")));
+  // Каждый переход рисуется в новый контейнер: если предыдущий экран ещё догружается,
+  // его запоздалая отрисовка попадёт в уже отключённый от страницы элемент.
+  const root = document.createElement("div");
+  view.replaceChildren(root);
   try {
-    if (parts[0] === "dialog" && parts.length >= 3) await renderDialog(view, parts[1], parts[2]);
-    else if (parts[0] === "appeals") await renderAppeals(view, parts[1] ? Number(parts[1]) : null);
-    else if (parts[0] === "checklists") await renderChecklists(view, parts[1] ? Number(parts[1]) : null);
-    else await renderDialogs(view);
+    if (parts[0] === "dialog" && parts.length >= 3) await renderDialog(root, parts[1], parts[2]);
+    else if (parts[0] === "appeals") await renderAppeals(root, parts[1] ? Number(parts[1]) : null);
+    else if (parts[0] === "checklists") await renderChecklists(root, parts[1] ? Number(parts[1]) : null);
+    else await renderDialogs(root);
   } catch (e) {
-    view.innerHTML = `<div class="panel error">Ошибка: ${esc(e.message)}</div>`;
+    if (!root.isConnected) return;
+    root.innerHTML = `<div class="panel error">Ошибка: ${esc(e.message)}</div>`;
     toast(e.message, "error");
   }
 }
