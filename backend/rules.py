@@ -62,7 +62,7 @@ CALL_VERIFY = (r"кодов\w* слов|дат\w* рождения|\bиин\b|ш
 
 MONEY_TO_OPERATOR = (r"(мне|мою)\s+на\s+карт|деньги мне|переведите мне|скиньте.{0,20}мне|сам их вложу|"
                      r"лично предлагаю|через компанию оформлять не надо|"
-                     r"маған аудар|менің картам|менің карт|"
+                     r"маған\s+(жеке\s+)?аудар|жеке аударыңыз|компания арқылы рәсімдемей|менің картам|менің карт|"
                      r"send (me )?(the )?money|transfer .{0,30}to me|my (personal )?card|outside the company")
 PERSONAL_NUMBER = r"личн\w* номер|персональн\w* номер|personal (phone )?number|жеке нөмір"
 PAID_PRIVATE = r"за плату|платн|частн|ақылы|жеке кеңес|i charge|paid|private (advice|consult)"
@@ -70,6 +70,9 @@ INSULT = (r"читать умеете|идиот|дурак|тупо[йг]|бе�
           r"can['’]?t you read|are you stupid|idiot|"
           r"ақымақ|оқи алмайсыз ба|миың")
 CONFIDENTIAL = r"друго(го|му) клиент|another (client|customer)['’]s|басқа клиенттің"
+ESCALATION_ONLY = (r"подключите.{0,20}оператор|соедините.{0,20}оператор|позовите оператор|"
+                   r"операторға қос|оператормен сөйлес|"
+                   r"(connect|put) me (through )?(with|to) an? (agent|operator)|talk to an? (agent|operator)")
 
 
 def _word(text: str, m: re.Match) -> str:
@@ -214,8 +217,15 @@ def rule_need(dialog: dict, crit: dict) -> Optional[dict]:
 def rule_consultation(dialog: dict, crit: dict) -> Optional[dict]:
     """N/A консультации — только если клиент так и не сформулировал запрос.
     Если запрос есть, вердикт не выносится, но модели запрещается N/A (ограничение no_na)."""
+    def is_request(text: str) -> bool:
+        words = text.split()
+        if len(words) < 3:
+            return False
+        # Просьба позвать оператора без сути вопроса — ещё не запрос
+        return not (re.search(ESCALATION_ONLY, text, I) and len(words) <= 8)
+
     req = next((i for i, m in enumerate(dialog["transcript"], start=1)
-                if m.get("speaker") == "client" and len((m.get("text") or "").split()) >= 3), None)
+                if m.get("speaker") == "client" and is_request(m.get("text") or "")), None)
     if req is None and crit.get("na_allowed"):
         return _res("na", "Клиент не сформулировал запрос до окончания чата.",
                     na_reason=crit.get("na_condition") or "Запрос не сформулирован.")
