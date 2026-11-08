@@ -16,7 +16,7 @@ import os
 import urllib.request
 
 from evaluator import SPEAKER, render_transcript
-from rules import apply_rule, is_verdict
+from rules import apply_rule, client_request_at, is_verdict
 
 SYSTEM = (
     "Ты проверяешь качество работы ОПЕРАТОРА (живого сотрудника) в диалоге поддержки брокера Freedom Broker. "
@@ -42,6 +42,9 @@ def _facts(dialog: dict) -> str:
         cl = [i for i, m in enumerate(tr, start=1) if m.get("speaker") == "client"]
         if cl:
             lines.append(f"- Первая реплика клиента #{cl[0]}: «{short(cl[0])}»")
+        if client_request_at(dialog) is None:
+            lines.append("- Клиент так и не сформулировал суть запроса (только приветствие или просьба позвать оператора); "
+                         "оценивай только то, что оператор успел сделать, и не снижай за то, чего не требовалось.")
     last = tr[-1]
     lines.append(f"- Последняя реплика диалога #{len(tr)} ({SPEAKER.get(last.get('speaker'), last.get('speaker'))}): «{short(len(tr))}»")
     return "\n".join(lines)

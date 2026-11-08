@@ -204,8 +204,13 @@ def rule_need(dialog: dict, crit: dict) -> Optional[dict]:
     if not ops:
         return None
     first_i, first = ops[0]
-    client_before = [m for m in tr[:first_i - 1] if m.get("speaker") == "client" and len((m.get("text") or "").split()) >= 3]
-    if re.search(GENERIC_HELP, first, I) and client_before:
+    req = client_request_at(dialog)
+    if req is None:
+        if crit.get("na_allowed"):
+            return _res("na", "Клиент так и не сформулировал запрос — выявлять потребность было не в чем.",
+                        na_reason=crit.get("na_condition") or "Запрос не сформулирован.")
+        return None
+    if re.search(GENERIC_HELP, first, I) and req < first_i:
         return _res("no", f"Клиент уже описал запрос, но оператор в #{first_i} задал шаблонный вопрос, не учтя известные детали.",
                     [first_i], (1, first_i))
     questions = [q for q in re.split(r"(?<=[.!?])\s+", first) if q.strip().endswith("?") and not re.search(GENERIC_HELP, q, I)]
@@ -214,18 +219,24 @@ def rule_need(dialog: dict, crit: dict) -> Optional[dict]:
     return None
 
 
+def _is_request(text: str) -> bool:
+    words = text.split()
+    if len(words) < 3 and "?" not in text:
+        return False
+    # Просьба позвать оператора без сути вопроса — ещё не запрос
+    return not (re.search(ESCALATION_ONLY, text, I) and len(words) <= 8)
+
+
+def client_request_at(dialog: dict) -> Optional[int]:
+    """Номер первой реплики клиента с сутью запроса (None — клиент так и не сформулировал запрос)."""
+    return next((i for i, m in enumerate(dialog["transcript"], start=1)
+                 if m.get("speaker") == "client" and _is_request(m.get("text") or "")), None)
+
+
 def rule_consultation(dialog: dict, crit: dict) -> Optional[dict]:
     """N/A консультации — только если клиент так и не сформулировал запрос.
     Если запрос есть, вердикт не выносится, но модели запрещается N/A (ограничение no_na)."""
-    def is_request(text: str) -> bool:
-        words = text.split()
-        if len(words) < 3:
-            return False
-        # Просьба позвать оператора без сути вопроса — ещё не запрос
-        return not (re.search(ESCALATION_ONLY, text, I) and len(words) <= 8)
-
-    req = next((i for i, m in enumerate(dialog["transcript"], start=1)
-                if m.get("speaker") == "client" and is_request(m.get("text") or "")), None)
+    req = client_request_at(dialog)
     if req is None and crit.get("na_allowed"):
         return _res("na", "Клиент не сформулировал запрос до окончания чата.",
                     na_reason=crit.get("na_condition") or "Запрос не сформулирован.")
@@ -237,6 +248,11 @@ def rule_empathy(dialog: dict, crit: dict) -> Optional[dict]:
     hit = next((i for i, t in _ops(dialog) if re.search(INSULT, t, I)), None)
     if hit:
         return _res("no", f"Оператор невежлив: реплика #{hit} содержит оскорбление клиента.", [hit], (hit, hit))
+    ops = _ops(dialog)
+    has_client = any(m.get("speaker") == "client" for m in dialog["transcript"])
+    if ops and has_client and client_request_at(dialog) is None:
+        return _res("yes", f"Клиент не сформулировал запрос и не выражал недовольства; оператор вежлив (#{ops[0][0]}).",
+                    [ops[0][0]], (ops[0][0], ops[-1][0]))
     return None
 
 

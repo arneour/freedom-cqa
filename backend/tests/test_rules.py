@@ -145,3 +145,14 @@ def test_need_rule():
     r = apply_rule(dlg(("client", "Где скачать реквизиты пополнения?"), ("operator", "Добрый день, я Виктор. Чем могу помочь?")), crit)
     assert r["answer"] == "no"
     assert apply_rule(dlg(("client", "Где тариф?"), ("operator", "Откройте кабинет.")), crit) is None
+
+
+def test_client_left_before_request():
+    """p2-kz-004: клиент попросил оператора и ушёл, не задав вопрос — потребность и консультация N/A, эмпатия «Да»."""
+    d = dlg(("client", "Сәлеметсіз бе."), ("bot", "Қандай сұрағыңыз бар?"),
+            ("client", "Операторға қосыңызшы, сұрағымды соған айтайын."), ("client", "Иә, қосыңызшы"),
+            ("operator", "Сәлеметсіз бе, менің атым Айгүл. Айта беріңіз, қалай көмектесе аламын?"),
+            ("system", "Клиент операторға сұрағын жазбай тұрып, чаттан шықты."))
+    assert apply_rule(d, {"id": "c02", "auto": "need", "type": "binary", "na_allowed": True})["answer"] == "na"
+    assert apply_rule(d, {"id": "c04", "auto": "consultation", "type": "scale", "na_allowed": True})["answer"] == "na"
+    assert apply_rule(d, {"id": "c05", "auto": "empathy", "type": "binary"})["answer"] == "yes"
