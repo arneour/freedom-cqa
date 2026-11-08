@@ -2,6 +2,7 @@
 
 Режимы:
 - LLM (Claude): по умолчанию, если доступен ключ ANTHROPIC_API_KEY.
+- openai: OpenAI API (CQA_EVALUATOR=openai или только OPENAI_API_KEY, CQA_MODEL=gpt-4.1-mini).
 - ollama: локальная модель через Ollama (CQA_EVALUATOR=ollama, CQA_MODEL=qwen2.5:3b, OLLAMA_URL).
 - heuristic: демо-режим без модели (ключевые слова), чтобы интерфейс работал без ключа.
 
@@ -102,10 +103,12 @@ def output_schema(checklist: dict) -> dict:
 def mode() -> str:
     """claude | ollama | heuristic"""
     m = os.environ.get("CQA_EVALUATOR", "").lower()
-    if m in ("heuristic", "ollama"):
+    if m in ("heuristic", "ollama", "openai", "claude"):
         return m
     if os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"):
         return "claude"
+    if os.environ.get("OPENAI_API_KEY"):
+        return "openai"
     return "heuristic"
 
 
@@ -114,7 +117,7 @@ def llm_available() -> bool:
 
 
 def model_name() -> str:
-    default = "qwen2.5:3b" if mode() == "ollama" else "claude-opus-5-5"
+    default = {"ollama": "qwen2.5:3b", "openai": "gpt-4.1-mini"}.get(mode(), "claude-opus-5-5")
     return os.environ.get("CQA_MODEL", default)
 
 
@@ -177,6 +180,48 @@ def evaluate_llm(dialog: dict, checklist: dict) -> tuple[dict, dict]:
         "cache_read_input_tokens": getattr(resp.usage, "cache_read_input_tokens", 0),
         "cache_creation_input_tokens": getattr(resp.usage, "cache_creation_input_tokens", 0),
         "cost_usd": _cost(model, resp.usage),
+        "calls": 1,
+    }
+    return data, usage
+
+
+def evaluate_openai(dialog: dict, checklist: dict) -> tuple[dict, dict]:
+    """OpenAI Chat Completions со строгим структурированным выводом (json_schema, strict)."""
+    import urllib.error
+    import urllib.request
+
+    model = model_name()
+    url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/") + "/chat/completions"
+    system = ("Ты — эксперт по контролю качества клиентской поддержки брокерской компании Freedom Broker. "
+              "Оцени работу оператора по чек-листу строго по его правилам.\n\n" + GUIDE
+              + "\n\nЧЕК-ЛИСТ:\n" + render_checklist(checklist))
+    user = ("Оцени диалог ниже по каждому критерию чек-листа (ровно один элемент на каждый criterion_id).\n\n"
+            "ТРАНСКРИПТ:\n" + render_transcript(dialog))
+    body = {
+        "model": model,
+        "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
+        "response_format": {"type": "json_schema",
+                            "json_schema": {"name": "evaluation", "strict": True, "schema": output_schema(checklist)}},
+    }
+    req = urllib.request.Request(url, data=json.dumps(body).encode("utf-8"), headers={
+        "Content-Type": "application/json", "Authorization": "Bearer " + os.environ.get("OPENAI_API_KEY", "")})
+    try:
+        with urllib.request.urlopen(req, timeout=300) as r:
+            resp = json.loads(r.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f"OpenAI API {e.code}: {e.read().decode('utf-8', 'replace')[:500]}") from e
+    msg = resp["choices"][0]["message"]
+    if msg.get("refusal"):
+        raise RuntimeError("Модель отказалась оценивать диалог (refusal)")
+    if resp["choices"][0].get("finish_reason") == "length":
+        raise RuntimeError("Ответ модели обрезан (length)")
+    data = json.loads(msg["content"])
+    u = resp.get("usage") or {}
+    usage = {
+        "model": resp.get("model", model),
+        "input_tokens": u.get("prompt_tokens", 0),
+        "output_tokens": u.get("completion_tokens", 0),
+        "cost_usd": None,
         "calls": 1,
     }
     return data, usage
@@ -294,6 +339,9 @@ def evaluate(dialog: dict, checklist: dict) -> tuple[dict[str, dict], str, dict,
     m = mode()
     if m == "ollama":
         data, usage = evaluate_ollama(dialog, checklist)
+        name = usage["model"]
+    elif m == "openai":
+        data, usage = evaluate_openai(dialog, checklist)
         name = usage["model"]
     elif m == "claude":
         data, usage = evaluate_llm(dialog, checklist)
